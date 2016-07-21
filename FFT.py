@@ -73,3 +73,4 @@ while True:
     # plt.pause(0.001)
     # plt.clf()
     # print(canal1)
+# EEG-Maynooth
