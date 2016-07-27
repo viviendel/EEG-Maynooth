@@ -1,5 +1,4 @@
 from pylsl import StreamInlet, resolve_stream
-import numpy as np
 from pylab import *
 import matplotlib.pyplot as plt
 import scipy.signal as signal
@@ -20,15 +19,16 @@ canal5 = list()
 canal6 = list()
 canal7 = list()
 canal8 = list()
-
+timestamp_list = list()
 plt.ion()
 
 while True:
 
-    sample = inlet.pull_sample()
+    sample,timestamp = inlet.pull_sample()
     # print(timestamp, sample)
     if len(canal1) > 2000:
         del canal1[0]
+        del timestamp_list[0]
         # del canal2[0]
         # del canal3[0]
         # del canal4[0]
@@ -37,7 +37,9 @@ while True:
         # del canal7[0]
         # del canal8[0]
 
-    canal1.append(int(sample[0][0]))
+    canal1.append(int(sample[0]))
+    timestamp_list.append(timestamp)
+
     # canal2.append(sample[0][1])
     # canal3.append(sample[0][2])
     # canal4.append(sample[0][3])
@@ -74,7 +76,7 @@ while True:
         b, a = fd.iirdesign(wp, ws, Rp, As, ftype='butter')
         w, H = signal.freqz(b, a)  # filter response
         y = signal.filtfilt(b, a, canal1)
-        plt.plot(y)
+        plt.plot(timestamp_list,y)
         plt.draw()
         plt.pause(0.05)  # figure updated and displayed, and the GUI event loop will run during the pause
         plt.clf()  # clear the current figure
